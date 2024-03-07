@@ -1,6 +1,23 @@
 #!/bin/bash
 reset
 
+# Copy .env.example to .env in any folder that
+# .env.example exists and .env does not exists
+folder_current=$(pwd)
+for folder in "$folder_current"/*; do
+    if [[ "$folder" =~ ^\..* ]]; then
+        continue
+    fi
+
+    if [ -f "$folder/.env.example" ]; then
+        if [ ! -f "$folder/.env" ]; then
+            cp "$folder/.env.example" "$folder/.env"
+        fi
+    fi
+done
+
+# Create Docker Compose command based on selected options
+
 database_options=("mysql" "postgres" "mongodb")
 database_value="mysql"
 
@@ -26,10 +43,12 @@ done
 
 PS3="Choose frontend: "
 select frontend_value in "${frontend_options[@]}"; do
-  break
+    docker_compose_cmd="$docker_compose_cmd --scale $frontend_value=1"
+    break
 done
 
 tput setaf 2
 echo $docker_compose_cmd
-eval $docker_compose_cmd
 tput sgr0
+
+eval $docker_compose_cmd
