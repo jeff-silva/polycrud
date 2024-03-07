@@ -1,14 +1,40 @@
 version: "3.8"
 
 services:
+  hyperf:
+    image: node:20.11.1
+
+  laravel:
+    image: node:20.11.1
+
+  mongodb:
+    image: node:20.11.1
+
   mysql:
     image: mysql:latest
     # ports:
-    #   - "3306:3306"
+    #   - 3306:3306
     volumes:
       - mysql_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: "app"
+
+  nest:
+    image: node:20.11.1
+
+  nuxt:
+    image: node:20.11.1
+    working_dir: /app
+    env_file: ./nuxt/.env
+    command: bash -c "yarn install && yarn dev"
+    ports:
+      - 24678:24678
+      - 3000:3000
+    volumes:
+      - "./nuxt:/app"
+
+  postgres:
+    image: node:20.11.1
 
 volumes:
   mysql_data: {}
