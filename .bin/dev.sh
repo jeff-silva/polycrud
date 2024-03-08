@@ -16,36 +16,57 @@ for folder in "$folder_current"/*; do
     fi
 done
 
+
 # Create Docker Compose command based on selected options
-
-database_options=("mysql" "postgres" "mongodb")
-database_value="mysql"
-
-backend_options=("laravel" "hyperf" "nest")
-backend_value="laravel"
-
-frontend_options=("nuxt")
-frontend_value="nuxt"
-
 docker_compose_cmd="docker-compose up --build --force-recreate --remove-orphans"
 
 PS3="Choose database: "
-select database_value in "${database_options[@]}"; do
-    docker_compose_cmd="$docker_compose_cmd --scale $database_value=1"
+choose_items=("mysql" "postgres" "mongodb")
+choose_value="mysql"
+
+select choose_value in "${choose_items[@]}"; do
+    for value in "${choose_items[@]}"; do
+        if [[ $value == $choose_value ]]; then
+            docker_compose_cmd="$docker_compose_cmd --scale $value=1"
+        else
+            docker_compose_cmd="$docker_compose_cmd --scale $value=0"
+        fi
+    done
     break
 done
 
-PS3="Choose backend: "
-select backend_value in "${backend_options[@]}"; do
-    docker_compose_cmd="$docker_compose_cmd --scale $backend_value=1"
-    break
-done
 
-PS3="Choose frontend: "
-select frontend_value in "${frontend_options[@]}"; do
-    docker_compose_cmd="$docker_compose_cmd --scale $frontend_value=1"
-    break
-done
+# PS3="Choose backend: "
+# choose_items=("laravel" "hyperf" "nest")
+# choose_value="laravel"
+
+# select choose_value in "${choose_items[@]}"; do
+#     for value in "${choose_items[@]}"; do
+#         if [[ $value == $choose_value ]]; then
+#             docker_compose_cmd="$docker_compose_cmd $value=1"
+#         else
+#             docker_compose_cmd="$docker_compose_cmd $value=0"
+#         fi
+#     done
+#     break
+# done
+
+
+# PS3="Choose frontend: "
+# choose_items=("nuxt")
+# choose_value="nuxt"
+
+# select choose_value in "${choose_items[@]}"; do
+#     for value in "${choose_items[@]}"; do
+#         if [[ $value == $choose_value ]]; then
+#             docker_compose_cmd="$docker_compose_cmd $value=1"
+#         else
+#             docker_compose_cmd="$docker_compose_cmd $value=0"
+#         fi
+#     done
+#     break
+# done
+
 
 tput setaf 2
 echo $docker_compose_cmd
