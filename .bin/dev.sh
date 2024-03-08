@@ -16,24 +16,26 @@ for folder in "$folder_current"/*; do
     fi
 done
 
+docker-compose up --build --force-recreate --remove-orphans
 
-# Create Docker Compose command based on selected options
-docker_compose_cmd="docker-compose up --build --force-recreate --remove-orphans"
 
-PS3="Choose database: "
-choose_items=("mysql" "postgres" "mongodb")
-choose_value="mysql"
+# # Create Docker Compose command based on selected options
+# docker_compose_cmd="docker-compose up --build --force-recreate --remove-orphans"
 
-select choose_value in "${choose_items[@]}"; do
-    for value in "${choose_items[@]}"; do
-        if [[ $value == $choose_value ]]; then
-            docker_compose_cmd="$docker_compose_cmd --scale $value=1"
-        else
-            docker_compose_cmd="$docker_compose_cmd --scale $value=0"
-        fi
-    done
-    break
-done
+# PS3="Choose database: "
+# choose_items=("mysql" "postgres" "mongodb")
+# choose_value="mysql"
+
+# select choose_value in "${choose_items[@]}"; do
+#     for value in "${choose_items[@]}"; do
+#         if [[ $value == $choose_value ]]; then
+#             docker_compose_cmd="$docker_compose_cmd --scale $value=1"
+#         else
+#             docker_compose_cmd="$docker_compose_cmd --scale $value=0"
+#         fi
+#     done
+#     break
+# done
 
 
 # PS3="Choose backend: "
@@ -68,8 +70,8 @@ done
 # done
 
 
-tput setaf 2
-echo $docker_compose_cmd
-tput sgr0
+# tput setaf 2
+# echo $docker_compose_cmd
+# tput sgr0
 
-eval $docker_compose_cmd
+# eval $docker_compose_cmd

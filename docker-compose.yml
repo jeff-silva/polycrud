@@ -15,20 +15,27 @@ services:
   # hyperf:
   #   image: node:20.11.1
 
-  # laravel:
-  #   image: node:20.11.1
+  laravel:
+    build: ./laravel/.docker
+    env_file: ./laravel/.env
+    volumes:
+      - "./laravel:/app"
+    # ports:
+    #   - "${BACKEND_PORT:-8000}:8000"
+    networks:
+      - sail
 
-  mongodb:
-    image: mongo
-    env_file: ./mongodb/.env
+  # mongodb:
+  #   image: mongo
+  #   env_file: ./mongodb/.env
 
   mysql:
     build: ./mysql
     env_file: ./mysql/.env
     # ports:
     #   - "3306:3306"
-    # networks:
-    #   - sail
+    networks:
+      - sail
 
   # nest:
   #   image: node:20.11.1
@@ -44,6 +51,6 @@ services:
   #   volumes:
   #     - "./nuxt:/app"
 
-  postgres:
-    image: postgres
-    env_file: ./postgres/.env
+  # postgres:
+  #   image: postgres
+  #   env_file: ./postgres/.env
